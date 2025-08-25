@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## 1.1.0 (2025-08-25)
+
+
+### Features
+
+* update l.svg.tile ([a2d9863](https://github.com/csychenci/Leaflet.VectorGrid/commit/a2d9863140dfe9fc7f7305f14e746416ee2d3718))
+
 ## 1.3.0 (2017-08-28)
 
 * Build using Rollup (#29 by @IvanSanchez)
