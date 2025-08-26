@@ -1,9 +1,11 @@
 
 // The geojson/topojson is sliced into tiles via a web worker.
-// This import statement depends on rollup-file-as-blob, so that the
-// variable 'workerCode' is a blob URL.
+// Worker code is inlined to avoid complex blob imports
 
-import workerCode from './slicerWebWorker.js.worker';
+
+
+// Import worker using rollup-plugin-web-worker-loader
+import SlicerWorker from 'web-worker:./slicerWebWorker.js';
 
 /*
  * 🍂class VectorGrid.Slicer
@@ -61,35 +63,33 @@ L.VectorGrid.Slicer = L.VectorGrid.extend({
 
 		// Create a shallow copy of this.options, excluding things that might
 		// be functions - we only care about topojson/geojsonvt options
-		var options = {};
+		var slicerOptions = {};
 		for (var i in this.options) {
 			if (i !== 'rendererFactory' &&
 				i !== 'vectorTileLayerStyles' &&
 				typeof (this.options[i]) !== 'function'
 			) {
-				options[i] = this.options[i];
+				slicerOptions[i] = this.options[i];
 			}
 		}
 
-// 		this._worker = new Worker(window.URL.createObjectURL(new Blob([workerCode])));
-		this._worker = new Worker(workerCode);
+		// Create worker with bundled dependencies
+		this._worker = new SlicerWorker();
 
-		// Send initial data to worker.
-		this._worker.postMessage(['slice', geojson, options]);
+		// Send initial data to worker
+		this._worker.postMessage(['slice', geojson, slicerOptions]);
 
 	},
 
-
 	_getVectorTilePromise: function(coords) {
-
 		var _this = this;
 
-		var p = new Promise( function waitForWorker(res) {
+		var p = new Promise(function waitForWorker(res) {
 			_this._worker.addEventListener('message', function recv(m) {
 				if (m.data.coords &&
 				    m.data.coords.x === coords.x &&
 				    m.data.coords.y === coords.y &&
-				    m.data.coords.z === coords.z ) {
+				    m.data.coords.z === coords.z) {
 
 					res(m.data);
 					_this._worker.removeEventListener('message', recv);

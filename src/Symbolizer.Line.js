@@ -25,4 +25,3 @@ export var LineSymbolizer = L.Polyline.extend({
 		Symbolizer.prototype.updateStyle.call(this, renderer, style);
 	},
 });
-

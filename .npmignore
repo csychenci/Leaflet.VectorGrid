@@ -8,3 +8,10 @@ aux
 .gobble-build
 yarn.lock
 demo
+docs
+rollup.config.js
+typedoc.json
+eslint.config.js
+src
+demo.html
+DOCS.md

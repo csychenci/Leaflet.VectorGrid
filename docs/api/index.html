@@ -1,0 +1,81 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><link rel="canonical" href="https://leaflet.github.io/Leaflet.VectorGrid/"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Leaflet.VectorGrid API Documentation - v1.0.1</title><meta name="description" content="Documentation for Leaflet.VectorGrid API Documentation"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="https://github.com/csychenci/Leaflet.VectorGrid" class="title">Leaflet.VectorGrid API Documentation - v1.0.1</a><div id="tsd-toolbar-links"><a href="https://github.com/csychenci/Leaflet.VectorGrid">GitHub</a><a href="https://www.npmjs.com/package/@csychenci/leaflet-vectorgrid">NPM</a></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>Leaflet.VectorGrid API Documentation - v1.0.1</h1></div><div class="tsd-panel tsd-typography"><h1 id="leafletvectorgrid" class="tsd-anchor-link">Leaflet.VectorGrid<a href="#leafletvectorgrid" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>Display gridded vector data (sliced <a href="https://geojson.org/" target="_blank" class="external">GeoJSON</a>, <a href="https://github.com/mbostock/topojson/wiki" target="_blank" class="external">TopoJSON</a> or <a href="https://github.com/mapbox/vector-tile-spec" target="_blank" class="external">protobuf vector tiles</a>) in <a href="https://www.leafletjs.com" target="_blank" class="external">Leaflet</a> 1.0.0</p>
+<h2 id="demos" class="tsd-anchor-link">Demos<a href="#demos" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://leaflet.github.io/Leaflet.VectorGrid/demo-geojson.html"><code>demo-geojson.html</code></a></td>
+<td>Sliced GeoJSON</td>
+</tr>
+<tr>
+<td><a href="https://leaflet.github.io/Leaflet.VectorGrid/demo-topojson.html"><code>demo-topojson.html</code></a></td>
+<td>Sliced TopoJSON (sorry for the antimeridian mess, topojson-to-geojson seems to not handle it properly)</td>
+</tr>
+<tr>
+<td><a href="https://leaflet.github.io/Leaflet.VectorGrid/demo-vectortiles.html"><code>demo-vectortiles.html</code></a></td>
+<td>Protobuf vector tiles: OpenMapTiles, MapBox, MapZen or even ESRI vector tiles</td>
+</tr>
+<tr>
+<td><a href="https://leaflet.github.io/Leaflet.VectorGrid/demo-points.html"><code>demo-points.html</code></a></td>
+<td>Clickable points and lines</td>
+</tr>
+<tr>
+<td><a href="https://leaflet.github.io/Leaflet.VectorGrid/demo-points-icons.html"><code>demo-points-icons.html</code></a></td>
+<td>Points as icons</td>
+</tr>
+</tbody>
+</table>
+<h2 id="using" class="tsd-anchor-link">Using<a href="#using" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>If you use <code>npm</code>:</p>
+<pre><code><span class="hl-0">	</span><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-1">install</span><span class="hl-0"> </span><span class="hl-1">leaflet</span><span class="hl-0">.</span><span class="hl-1">vectorgrid</span>
+</code><button>Copy</button></pre>
+
+<p>That will make available two files: <code>dist/Leaflet.VectorGrid.js</code> and <code>dist/Leaflet.VectorGrid.bundled.js</code>.</p>
+<p>The difference is that <code>dist/Leaflet.VectorGrid.bundled.js</code> includes all of <code>VectorGrid</code>'s dependencies:</p>
+<ul>
+<li><a href="https://github.com/mapbox/geojson-vt" target="_blank" class="external">geojson-vt</a> (Under ISC license)</li>
+<li><a href="https://github.com/mapbox/pbf" target="_blank" class="external">pbf</a> (Under BSD license)</li>
+<li><a href="https://github.com/mbostock/topojson" target="_blank" class="external">topojson</a> (Under BSD license)</li>
+<li><a href="https://github.com/mapbox/vector-tile-js" target="_blank" class="external">vector-tile</a> (Under BSD license)</li>
+</ul>
+<p>If you are adding these dependencies by yourself, use <code>dist/Leaflet.VectorGrid.js</code> instead.</p>
+<p>If you don't want to deal with <code>npm</code> and local files, you can use <code>unpkg.com</code> instead:</p>
+<pre><code><span class="hl-0">&lt;</span><span class="hl-1">script</span><span class="hl-0"> </span><span class="hl-1">src</span><span class="hl-0">=</span><span class="hl-2">&quot;https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js&quot;</span><span class="hl-0">&gt;&lt;/</span><span class="hl-3">script</span><span class="hl-0">&gt;</span>
+</code><button>Copy</button></pre>
+
+<p>or, with the same caveats about bundled dependencies:</p>
+<pre><code><span class="hl-0">&lt;</span><span class="hl-1">script</span><span class="hl-0"> </span><span class="hl-1">src</span><span class="hl-0">=</span><span class="hl-2">&quot;https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.js&quot;</span><span class="hl-0">&gt;&lt;/</span><span class="hl-3">script</span><span class="hl-0">&gt;</span>
+</code><button>Copy</button></pre>
+
+<h2 id="docs" class="tsd-anchor-link">Docs<a href="#docs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This plugin exposes two new classes:</p>
+<ul>
+<li><code>L.VectorGrid.Slicer</code> for displaying GeoJSON or TopoJSON data</li>
+<li><code>L.VectorGrid.Protobuf</code> for displaying vector tiles from an online tile server</li>
+</ul>
+<p>You can find the API documentation, and the explanation about the styling, at:</p>
+<p><a href="https://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html">https://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html</a></p>
+<h2 id="dependencies" class="tsd-anchor-link">Dependencies<a href="#dependencies" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p><code>L.VectorGrid.Slicer</code> requires <code>geojson-vt</code>: the global variable <code>geojsonvt</code> must exist. If topojson data is used, then the <code>topojson</code> global variable must also exist.</p>
+<p><code>L.VectorGrid.Protobuf</code> requires <code>vector-tile</code> and <code>pbf</code>: the global variables <code>VectorTile</code> and <code>Pbf</code> must exist.</p>
+<p>By default, VectorGrid is built with those dependencies bundled.</p>
+<h2 id="developing" class="tsd-anchor-link">Developing<a href="#developing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Run <code>npm install</code>.</p>
+<h2 id="todo" class="tsd-anchor-link">TODO<a href="#todo" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>Sub-panes for the tile renderers (to set the &quot;z-index&quot; of layers/features)</li>
+<li>More <code>&lt;g&gt;</code>roups in SVG</li>
+<li>Offscreen <code>&lt;canvas&gt;</code>es in Canvas</li>
+<li><code>getBounds()</code> support for the slicer (inherit/extrapolate from geojson data)</li>
+<li>Parser for mapbox-like vector stylesheets</li>
+</ul>
+<h2 id="motivation" class="tsd-anchor-link">Motivation<a href="#motivation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Before VectorGrid, loading vector tiles in Leaflet could only be done with the
+Leaflet.MapboxVectorTile or the Hoverboard plugin, but neither of those works with
+Leaflet 1.0.0 (or greater).</p>
+<p>VectorGrid leverages the GridLayer feature introduced in Leaflet 1.0.0.</p>
+<h2 id="legalese" class="tsd-anchor-link">Legalese<a href="#legalese" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><hr>
+<p>&quot;THE BEER-WARE LICENSE&quot;:
+<a href="mailto:ivan@sanchezortega.es">ivan@sanchezortega.es</a> wrote this file. As long as you retain this notice you
+can do whatever you want with this stuff. If we meet some day, and you think
+this stuff is worth it, you can buy me a beer in return.</p>
+<hr>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#leafletvectorgrid"><span>Leaflet.<wbr/>Vector<wbr/>Grid</span></a><ul><li><a href="#demos"><span>Demos</span></a></li><li><a href="#using"><span>Using</span></a></li><li><a href="#docs"><span>Docs</span></a></li><li><a href="#dependencies"><span>Dependencies</span></a></li><li><a href="#developing"><span>Developing</span></a></li><li><a href="#todo"><span>TODO</span></a></li><li><a href="#motivation"><span>Motivation</span></a></li><li><a href="#legalese"><span>Legalese</span></a></li></ul></div></details></div><div class="site-menu"><nav id="tsd-sidebar-links" class="tsd-navigation"><a href="https://leaflet.github.io/Leaflet.VectorGrid/">Documentation</a><a href="https://leaflet.github.io/Leaflet.VectorGrid/demo.html">Examples</a><a href="https://github.com/csychenci/Leaflet.VectorGrid" class="tsd-nav-link">GitHub</a><a href="https://www.npmjs.com/package/@csychenci/leaflet-vectorgrid" class="tsd-nav-link">NPM</a></nav><nav class="tsd-navigation"><a href="modules.html">Leaflet.VectorGrid API Documentation - v1.0.1</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

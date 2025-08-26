@@ -121,7 +121,9 @@ L.SVG.Tile = L.SVG.extend({
 			subtract = layer._point.subtract(anchor)
 		if (iconOptions.iconUrl) {
 			const path = layer._path = L.SVG.create('image');
-			path.classList.add(iconOptions?.className);
+			if (iconOptions.className) {
+				path.classList.add(iconOptions.className);
+			}
 			path.setAttribute('x', subtract.x);
 			path.setAttribute('y', subtract.y);
 			path.setAttribute('width', point.x + 'px');

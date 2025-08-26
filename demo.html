@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet VectorGrid 矢量图层演示</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .container {
+            display: flex;
+            height: calc(100vh - 120px);
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+        
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .control-group h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+        
+        .control-item {
+            margin-bottom: 10px;
+        }
+        
+        .control-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .control-item input, .control-item select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .legend {
+            margin-top: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ Leaflet VectorGrid 演示</h1>
+        <p>展示矢量瓦片图层的强大功能</p>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="control-group">
+                <h3>🎨 图层样式</h3>
+                <div class="control-item">
+                    <label>填充颜色:</label>
+                    <input type="color" id="fillColor" value="#3388ff">
+                </div>
+                <div class="control-item">
+                    <label>填充透明度:</label>
+                    <input type="range" id="fillOpacity" min="0" max="1" step="0.1" value="0.6">
+                </div>
+                <div class="control-item">
+                    <label>边框颜色:</label>
+                    <input type="color" id="strokeColor" value="#ffffff">
+                </div>
+                <div class="control-item">
+                    <label>边框宽度:</label>
+                    <input type="range" id="strokeWidth" min="0" max="5" step="0.5" value="1">
+                </div>
+                <button class="btn" onclick="updateStyle()">应用样式</button>
+            </div>
+            
+            <div class="control-group">
+                <h3>🌍 数据源</h3>
+                <div class="control-item">
+                    <label>选择数据类型:</label>
+                    <select id="dataType" onchange="switchDataType()">
+                        <option value="geojson">GeoJSON 切片</option>
+                        <option value="protobuf">Protobuf 矢量瓦片</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="loadSampleData()">加载示例数据</button>
+            </div>
+            
+            <div class="control-group">
+                <h3>⚙️ 交互设置</h3>
+                <div class="control-item">
+                    <label>
+                        <input type="checkbox" id="interactive" checked onchange="toggleInteractive()">
+                        启用交互功能
+                    </label>
+                </div>
+                <div class="control-item">
+                    <label>
+                        <input type="checkbox" id="showTooltip" checked>
+                        显示悬停提示
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="info-panel">
+                <h4>📊 图层信息</h4>
+                <div id="layerInfo">
+                    <p>等待加载数据...</p>
+                </div>
+                <div class="legend">
+                    <h5>图例</h5>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3388ff;"></div>
+                        <span>矢量要素</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- VectorGrid JavaScript -->
+    <script src="./dist/Leaflet.VectorGrid.bundled.min.js"></script>
+    
+    <script>
+        // 初始化地图
+        const map = L.map('map').setView([39.9042, 116.4074], 10);
+        
+        // 添加底图
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        let vectorGrid = null;
+        let currentStyle = {
+            fill: true,
+            fillColor: '#3388ff',
+            fillOpacity: 0.6,
+            stroke: true,
+            color: '#ffffff',
+            weight: 1
+        };
+        
+        // 示例 GeoJSON 数据
+        const sampleGeoJSON = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "北京市中心",
+                        "type": "商业区",
+                        "population": 50000
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [116.3974, 39.9042],
+                            [116.4174, 39.9042],
+                            [116.4174, 39.9242],
+                            [116.3974, 39.9242],
+                            [116.3974, 39.9042]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "朝阳区",
+                        "type": "住宅区",
+                        "population": 80000
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [116.4274, 39.9042],
+                            [116.4474, 39.9042],
+                            [116.4474, 39.9242],
+                            [116.4274, 39.9242],
+                            [116.4274, 39.9042]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "海淀区",
+                        "type": "科技园区",
+                        "population": 120000
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [116.3774, 39.9242],
+                            [116.3974, 39.9242],
+                            [116.3974, 39.9442],
+                            [116.3774, 39.9442],
+                            [116.3774, 39.9242]
+                        ]]
+                    }
+                }
+            ]
+        };
+        
+        // 更新样式函数
+        function updateStyle() {
+            currentStyle.fillColor = document.getElementById('fillColor').value;
+            currentStyle.fillOpacity = parseFloat(document.getElementById('fillOpacity').value);
+            currentStyle.color = document.getElementById('strokeColor').value;
+            currentStyle.weight = parseFloat(document.getElementById('strokeWidth').value);
+            
+            if (vectorGrid) {
+                // 重新加载图层以应用新样式
+                loadSampleData();
+            }
+        }
+        
+        // 切换数据类型
+        function switchDataType() {
+            const dataType = document.getElementById('dataType').value;
+            document.getElementById('layerInfo').innerHTML = 
+                `<p>数据类型: ${dataType === 'geojson' ? 'GeoJSON 切片' : 'Protobuf 矢量瓦片'}</p>`;
+        }
+        
+        // 切换交互功能
+        function toggleInteractive() {
+            if (vectorGrid) {
+                loadSampleData();
+            }
+        }
+        
+        // 加载示例数据
+        function loadSampleData() {
+            // 移除现有图层
+            if (vectorGrid) {
+                map.removeLayer(vectorGrid);
+            }
+            
+            const interactive = document.getElementById('interactive').checked;
+            const showTooltip = document.getElementById('showTooltip').checked;
+            
+            // 创建 VectorGrid.Slicer 图层
+            vectorGrid = L.vectorGrid.slicer(sampleGeoJSON, {
+                interactive: interactive,
+                vectorTileLayerStyles: {
+                    sliced: function(properties, zoom) {
+                      console.log("currentStyle", currentStyle)
+                        return currentStyle;
+                    }
+                },
+                maxZoom: 18,
+                indexMaxZoom: 5,
+                indexMaxPoints: 100000
+            });
+            
+            // 添加事件监听器
+            if (interactive) {
+                vectorGrid.on('click', function(e) {
+                    const properties = e.layer.properties;
+                    L.popup()
+                        .setContent(`
+                            <h4>${properties.name}</h4>
+                            <p><strong>类型:</strong> ${properties.type}</p>
+                            <p><strong>人口:</strong> ${properties.population.toLocaleString()}</p>
+                        `)
+                        .setLatLng(e.latlng)
+                        .openOn(map);
+                });
+                
+                if (showTooltip) {
+                    vectorGrid.on('mouseover', function(e) {
+                        const properties = e.layer.properties;
+                        e.layer.bindTooltip(`${properties.name} (${properties.type})`, {
+                            sticky: true
+                        }).openTooltip();
+                    });
+                }
+            }
+            
+            // 添加到地图
+            vectorGrid.addTo(map);
+            
+            // 更新信息面板
+            document.getElementById('layerInfo').innerHTML = `
+                <p><strong>数据类型:</strong> GeoJSON 切片</p>
+                <p><strong>要素数量:</strong> ${sampleGeoJSON.features.length}</p>
+                <p><strong>交互模式:</strong> ${interactive ? '启用' : '禁用'}</p>
+                <p><strong>最大缩放:</strong> 18</p>
+            `;
+            
+            console.log('VectorGrid 图层已加载', vectorGrid);
+        }
+        
+        // 页面加载完成后自动加载示例数据
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(loadSampleData, 1000);
+        });
+        
+        // 地图事件监听
+        map.on('zoomend', function() {
+            console.log('当前缩放级别:', map.getZoom());
+        });
+
+        loadSampleData()
+    </script>
+</body>
+</html>
